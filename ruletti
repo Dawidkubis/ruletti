@@ -9,6 +9,7 @@ from functools import reduce
 from time import sleep
 
 root = getcwd()
+BARREL_SIZE = 6
 
 def get_ran_path(start, done):
 	"""returns a random path"""
@@ -39,8 +40,11 @@ def italianize(path):
 
 italianized = set()
 
-if randint(1, 6) == 6:
+roll = randint(1, BARREL_SIZE)
+print(roll, end=" - ")
+if roll == 6:
 	print("get ravioli'd")
+	sleep(1)
 	while True:
 		try:
 			a = get_ran_path(root, italianized)
