@@ -1,14 +1,66 @@
 #!/usr/bin/python3
 
+"""a fun game of russian rulette - italian version"""
+
 from random import randint, choice
-from os import listdir
+from os import listdir, access, R_OK, getcwd, rename
+from os.path import join, isfile, isdir, splitext
+from functools import reduce
+from time import sleep
 
-ROOT = "/"
+root = getcwd()
 
-def get_files():
-	pass
+def get_ran_path(start, done):
+	"""returns a random path"""
+	everything = [join(start, i) for i in listdir(start)]
+	everything = [i for i in everything if i not in done]
+	files = [i for i in everything if isfile(i)]
+	dirs = [i for i in everything if isdir(i) and access(i, R_OK)]
 
-def italian():
-	pass
+	choose = choice([True, False])
 
-[print("get raviolid"), ] if randint(1,6) == 6 else print("fine")
+	if everything:
+		if choose and dirs:
+			return get_ran_path(choice(dirs), done)
+		elif files:
+			return choice(files)
+		else:
+			return start
+	else:
+		return start
+
+def italianize(path):
+	"""italianizes input path"""
+	split = list(splitext(path))
+	split[0] += choice(["etti", "violi", "i", "a", "-pasta", "tuccini", "-la-vista", "getti"])
+	if split[1]:
+		split[1] = choice([".it", ".italia", ".pasta", ".mammamia", ".its-a-me"])
+	return reduce(lambda a, b: a + b, split)
+
+italianized = set()
+
+if randint(1, 6) == 6:
+	print("get ravioli'd")
+	print("-------------")
+	while True:
+		try:
+			a = get_ran_path(root, italianized)
+		except Exception as exception:
+			print(exception)
+			italianized.add(a)
+			continue
+
+		b = italianize(a)
+
+		# the dangerous part
+		try:
+			rename(a, b)
+		except Exception:
+			continue
+
+		italianized.add(b)
+
+		print(f"spaggeti'd {a} -> {b}")
+
+else:
+	print("you're fine")
