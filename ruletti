@@ -41,7 +41,6 @@ italianized = set()
 
 if randint(1, 6) == 6:
 	print("get ravioli'd")
-	print("-------------")
 	while True:
 		try:
 			a = get_ran_path(root, italianized)
